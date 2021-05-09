@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <audio controls id="mil"><source src="move.mp3" type="audio/mpeg" id="mila"></audio>
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+    let music = document.querySelector("#mil");
+    let lastPaintTime = 0;
+    function main(ctime)
+    {
+        window.requestAnimationFrame(main);
+        if((ctime-lastPaintTime)/1000 <= 5)
+    {
+        return;
+    }
+    lastPaintTime = ctime;
+        show("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=363&date=10-05-2021").then(data => {
+            let puneId;
+
+let pincodeEx= /4110[0-9]{2}/
+    $.each(data, (i, centers) => {
+        $.each(centers, (i, center) => {
+            if(pincodeEx.test(center.pincode) && center.sessions[0].min_age_limit == 18 && center.sessions[0].available_capacity > 0 )
+            {   
+                console.log(center);
+                music.play();
+            }
+             console.log(ctime);
+            
+        })
+        
+    })
+});
+        }
+async function show(url){
+    try{
+    let response = await fetch(url);
+    if(!response.ok)
+        throw new Error("Something went wrong");
+    return await response.json();
+    } catch(err){
+        alert(err);
+    }
+}
+
+window.requestAnimationFrame(main);
+</script>
+</html>
